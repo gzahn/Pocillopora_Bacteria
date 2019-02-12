@@ -1,0 +1,17 @@
+[1] "PermANOVA Table:"
+[1] PermANOVA Table:
+
+Call:
+adonis(formula = otu ~ Orientation, data = df) 
+
+Permutation: free
+Number of permutations: 999
+
+Terms added sequentially (first to last)
+
+            Df SumsOfSqs MeanSqs F.Model      R2 Pr(>F)    
+Orientation  1     1.541  1.5412  3.4257 0.03481  0.001 ***
+Residuals   95    42.740  0.4499         0.96519           
+Total       96    44.282                 1.00000           
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
