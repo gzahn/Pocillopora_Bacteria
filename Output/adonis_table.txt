@@ -1,5 +1,4 @@
-[1] "PermANOVA Table:"
-[1] PermANOVA Table:
+PermANOVA Table:
 
 Call:
 adonis(formula = otu ~ Orientation, data = df) 
