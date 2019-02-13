@@ -1,1 +1,1 @@
-# Pocillopora_Fungi
+# Pocillopora_Bacteria
