@@ -11,7 +11,7 @@ Terms added sequentially (first to last)
 
             Df SumsOfSqs MeanSqs F.Model      R2 Pr(>F)    
 Orientation  1     1.541 1.54123  3.4387 0.03481  0.001 ***
-Island       8     3.747 0.46839  1.0451 0.08462  0.039 *  
+Island       8     3.747 0.46839  1.0451 0.08462  0.034 *  
 Residuals   87    38.993 0.44820         0.88057           
 Total       96    44.282                 1.00000           
 ---
@@ -19,39 +19,39 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 [1] "Pairwise adonis between islands (Bonferroni corrected Pvalues:"
 [1] Pairwise adonis between islands (Bonferroni corrected Pvalues:
                                 pairs   F.Model         R2   p.value p.adjusted
-1                 Sultan Shoal vs TPT 1.2394388 0.12104558 0.0810000      1.000
-2             Sultan Shoal vs Semakau 1.1740470 0.10506909 0.0810000      1.000
+1                 Sultan Shoal vs TPT 1.2394388 0.12104558 0.0720000      1.000
+2             Sultan Shoal vs Semakau 1.1740470 0.10506909 0.0860000      1.000
 3  Sultan Shoal vs Raffles Lighthouse 1.1521404 0.05717211 0.0480000      1.000
-4                Sultan Shoal vs Jong 1.1304907 0.12381489 0.0990000      1.000
+4                Sultan Shoal vs Jong 1.1304907 0.12381489 0.0960000      1.000
 5               Sultan Shoal vs Hantu 1.3294453 0.24945284 0.1666667      1.000
 6             Sultan Shoal vs St John       NaN 1.00000000        NA         NA
-7             Sultan Shoal vs Sisters 1.0329362 0.05156190 0.3740000      1.000
-8                Sultan Shoal vs Kusu 0.9950831 0.04976639 0.6370000      1.000
-9                      TPT vs Semakau 0.9570631 0.04795611 0.7730000      1.000
-10          TPT vs Raffles Lighthouse 1.0711529 0.03684590 0.0670000      1.000
+7             Sultan Shoal vs Sisters 1.0329362 0.05156190 0.3500000      1.000
+8                Sultan Shoal vs Kusu 0.9950831 0.04976639 0.6470000      1.000
+9                      TPT vs Semakau 0.9570631 0.04795611 0.7750000      1.000
+10          TPT vs Raffles Lighthouse 1.0711529 0.03684590 0.0530000      1.000
 11                        TPT vs Jong 1.2433247 0.06815231 0.0010000      0.035
-12                       TPT vs Hantu 1.0205675 0.07279074 0.2820000      1.000
-13                     TPT vs St John 1.0276288 0.10247974 0.3640000      1.000
+12                       TPT vs Hantu 1.0205675 0.07279074 0.2770000      1.000
+13                     TPT vs St John 1.0276288 0.10247974 0.3500000      1.000
 14                     TPT vs Sisters 1.1652372 0.03995295 0.0360000      1.000
 15                        TPT vs Kusu 1.7669881 0.05936066 0.0010000      0.035
 16      Semakau vs Raffles Lighthouse 1.0316864 0.03435326 0.1980000      1.000
-17                    Semakau vs Jong 1.1809282 0.06156783 0.0070000      0.245
-18                   Semakau vs Hantu 1.0674054 0.07084202 0.1370000      1.000
-19                 Semakau vs St John 0.9867158 0.08980989 0.5500000      1.000
-20                 Semakau vs Sisters 1.1307287 0.03752743 0.0720000      1.000
+17                    Semakau vs Jong 1.1809282 0.06156783 0.0060000      0.210
+18                   Semakau vs Hantu 1.0674054 0.07084202 0.1320000      1.000
+19                 Semakau vs St John 0.9867158 0.08980989 0.5770000      1.000
+20                 Semakau vs Sisters 1.1307287 0.03752743 0.0650000      1.000
 21                    Semakau vs Kusu 1.6988907 0.05534046 0.0010000      0.035
-22         Raffles Lighthouse vs Jong 1.0980906 0.03908061 0.0150000      0.525
-23        Raffles Lighthouse vs Hantu 1.0875969 0.04515174 0.0450000      1.000
-24      Raffles Lighthouse vs St John 0.9591068 0.04805359 0.7580000      1.000
+22         Raffles Lighthouse vs Jong 1.0980906 0.03908061 0.0050000      0.175
+23        Raffles Lighthouse vs Hantu 1.0875969 0.04515174 0.0520000      1.000
+24      Raffles Lighthouse vs St John 0.9591068 0.04805359 0.7600000      1.000
 25      Raffles Lighthouse vs Sisters 1.3222611 0.03362627 0.0010000      0.035
 26         Raffles Lighthouse vs Kusu 1.9850339 0.04964442 0.0010000      0.035
-27                      Jong vs Hantu 1.0997278 0.08395043 0.0260000      0.910
+27                      Jong vs Hantu 1.0997278 0.08395043 0.0430000      1.000
 28                    Jong vs St John 0.9238275 0.10352369 1.0000000      1.000
-29                    Jong vs Sisters 1.2783954 0.04520749 0.0100000      0.350
+29                    Jong vs Sisters 1.2783954 0.04520749 0.0030000      0.105
 30                       Jong vs Kusu 1.5976146 0.05586531 0.0010000      0.035
 31                   Hantu vs St John 1.0250972 0.20399549 0.3333333      1.000
-32                   Hantu vs Sisters 1.1346167 0.04701201 0.0780000      1.000
+32                   Hantu vs Sisters 1.1346167 0.04701201 0.0850000      1.000
 33                      Hantu vs Kusu 1.5395430 0.06273723 0.0010000      0.035
-34                 St John vs Sisters 0.9408543 0.04718225 0.8640000      1.000
-35                    St John vs Kusu 1.0162682 0.05077211 0.1880000      1.000
+34                 St John vs Sisters 0.9408543 0.04718225 0.8650000      1.000
+35                    St John vs Kusu 1.0162682 0.05077211 0.2020000      1.000
 36                    Sisters vs Kusu 1.3203480 0.03357926 0.0010000      0.035

@@ -471,3 +471,55 @@ ggplot(div, aes(x=Site, y=Shannon, fill = Site)) +
   labs(y="Shannon Diversity")
 
 ggsave(filename = "../Output/Shannon_Diversity.png", dpi = 300)  
+
+
+
+
+# Plot diversity bar charts ####
+bact_barplot = plot_bar(ps3ra, fill = "Phylum") + 
+  geom_bar(aes(color=Phylum, fill=Phylum), stat = "identity") + labs(y="Relative Abundance",x = "Sample ID") + 
+  coord_flip() + 
+ggsave(bact_barplot, filename = "../Output/RelAbund_Barplot_by_Sample.png", dpi = 300, height = 10, width = 8)  
+
+bact_barplot_order = plot_bar(ps3, fill = "Order") + 
+  geom_bar(aes(color=Order, fill=Order), stat = "identity") + labs(y="Relative Abundance",x = "Sample ID") + 
+  coord_flip()
+ggsave(bact_barplot_order, filename = "../Output/RelAbund_Barplot_Order_by_Sample.png", dpi = 300, height = 10, width = 20)  
+
+# Same, but mean for each island
+phylum_summary = summarize_taxa(ps3, Rank = "Phylum", GroupBy = "Island.Collected.From")
+ggplot(phylum_summary, aes(y=meanRA, x = Island.Collected.From, fill = Phylum)) +
+  geom_bar(stat="identity") + coord_flip() + theme_bw()
+
+
+
+for(island in levels(ps3@sam_data$Island.Collected.From)){
+  df = (summarize_taxa(subset_samples(ps3, Island.Collected.From == island), Rank = "Phylum"))
+  df$Island = island
+  df$RA = df$meanRA / sum(df$meanRA)
+  assign(island, df, envir = .GlobalEnv)   
+  print(island)
+}
+Sisters
+
+phylum_island = rbind(Hantu,Jong,Kusu,`Raffles Light House`,Semakau,Sisters,`St John`,`Sultan Shoals`,TPT)
+
+for(island in levels(ps3@sam_data$Island.Collected.From)){
+  df = (summarize_taxa(subset_samples(ps3, Island.Collected.From == island), Rank = "Order"))
+  df$Island = island
+  df$RA = df$meanRA / sum(df$meanRA)
+  assign(island, df, envir = .GlobalEnv)   
+  print(island)
+}
+
+order_island = rbind(Hantu,Jong,Kusu,`Raffles Light House`,Semakau,Sisters,`St John`,`Sultan Shoals`,TPT)
+
+ggplot(phylum_island, aes(y=((RA)), x = Island, fill = Phylum)) +
+  geom_bar(stat="identity") + coord_flip() + theme_bw() + labs(x= "Island", y = "Relative Abundance")
+ggsave(filename = "../Output/Relabund_by_Island.png", dpi = 300, height = 6.07, width = 10)
+
+ggplot(order_island, aes(y=((RA)), x = Island, fill = Order)) +
+  geom_bar(stat="identity") + coord_flip() + theme_bw() + labs(x= "Island", y = "Relative Abundance")
+ggsave(filename = "../Output/Relabund_order_by_Island.png", dpi = 300, height = 6.07, width = 16)
+
+

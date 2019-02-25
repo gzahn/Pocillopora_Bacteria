@@ -10,6 +10,12 @@ library(ggpubr)
 library(broom)
 library(stargazer)
 library(sjPlot)
+library(RColorBrewer)
+source("plot_bar2.R")
+source("summarize_taxa.R")
+
+# Color palette
+pal = c("#6b5456","#ec8d1b","#6abf2a","#8b53b7","#70acbe","#01c95b","#c00014","#31332f","#f7d000","#abba00")
 
 # load processed data
 ps = readRDS(file = "./Output/clean_phyloseq_object.RDS")
@@ -20,6 +26,7 @@ rank_names(ps)
 sample_variables(ps)
 otu_table(ps)[1:5, 1:5]
 tax_table(ps)[1:5, 1:7]
+
 
 # Change sequences to unique IDs to make viewing easier
 seqs_16S = taxa_names(ps)
@@ -106,9 +113,10 @@ plot_abundance = function(physeq,title = "",
 
 # abundance before and after normalization
 plotBefore = plot_abundance(ps3,"") + ggtitle("Before Normalization") + theme(axis.text.x = element_text(angle = 75, hjust = 1))
-ggsave(plotBefore, filename = "./Output/Abundance_before_norm.png", dpi= 300)
+ggsave(plotBefore, filename = "./Output/Abundance_before_norm.png", dpi= 300, width = 12, height = 10)
 plotAfter = plot_abundance(ps3ra,"") + ggtitle("After Relative") + theme(axis.text.x = element_text(angle = 75, hjust = 1))
-ggsave(plotAfter, filename = "./Output/Abundance_after_norm.png", dpi=300)
+ggsave(plotAfter, filename = "./Output/Abundance_after_norm.png", dpi=300, width = 12, height = 10)
+
 
 
 # Make final figure of relative abundance of phyla by island ####
@@ -125,10 +133,13 @@ ggsave(plotAfter, filename = "./Output/Abundance_after_norm.png", dpi=300)
     facet_wrap(facets = "Phylum") + scale_y_log10()+
     theme_bw() + theme(legend.position="none") + 
     labs(x="Orientation",y="Relative Abundance") +
-    theme(axis.text.x = element_text(angle = 75, hjust = 1, size = 8)) 
+    theme(axis.text.x = element_text(angle = 75, hjust = 1, size = 8)) +
+    scale_color_manual(values = pal)
+  
 ggsave(relabundplot, filename = "./Output/Phylum_relabund_by_Orientation.png",dpi=300)
 
-  
+
+
 # Ordination(s) ####
 NMDS = ordinate(ps3ra, method = "NMDS", distance = "bray")
 DPCoA = ordinate(ps3ra, method = "DPCoA", distance = "bray")
@@ -138,13 +149,13 @@ CCA = ordinate(ps3ra, method = "CCA", distance = "bray")
 RDA = ordinate(ps3ra, method = "RDA", distance = "bray")
 
 p_NMDS = plot_ordination(ps3ra, NMDS, color = "Island.Collected.From", shape = "Orientation") + scale_color_discrete(name = "Island") + 
-  scale_color_discrete(name = "Site") + 
-    theme_bw()
-p_DPCoA = plot_ordination(ps3ra, DPCoA, color = "Island.Collected.From", shape = "Orientation") + ggtitle("DPCoA") + scale_color_discrete(name = "Site")+theme_bw()
-p_PCoA = plot_ordination(ps3ra, PCoA, color = "Island.Collected.From", shape = "Orientation") + ggtitle("PCoA")  + scale_color_discrete(name = "Site")+theme_bw()
-p_DCA = plot_ordination(ps3ra, DCA, color = "Island.Collected.From", shape = "Orientation") + ggtitle("DCA")  + scale_color_discrete(name = "Site")+theme_bw()
-p_CCA = plot_ordination(ps3ra, CCA, color = "Island.Collected.From", shape = "Orientation") + ggtitle("CCA")  + scale_color_discrete(name = "Site")+theme_bw()
-p_RDA = plot_ordination(ps3ra, RDA, color = "Island.Collected.From", shape = "Orientation") + ggtitle("RDA")  + scale_color_discrete(name = "Site")+theme_bw()
+  scale_color_discrete(name = "Site") + theme_bw() + scale_color_manual(values = pal)
+
+p_DPCoA = plot_ordination(ps3ra, DPCoA, color = "Island.Collected.From", shape = "Orientation") + ggtitle("DPCoA") + scale_color_discrete(name = "Site")+theme_bw()+scale_color_manual(values = pal)
+p_PCoA = plot_ordination(ps3ra, PCoA, color = "Island.Collected.From", shape = "Orientation") + ggtitle("PCoA")  + scale_color_discrete(name = "Site")+theme_bw()+scale_color_manual(values = pal)
+p_DCA = plot_ordination(ps3ra, DCA, color = "Island.Collected.From", shape = "Orientation") + ggtitle("DCA")  + scale_color_discrete(name = "Site")+theme_bw()+scale_color_manual(values = pal)
+p_CCA = plot_ordination(ps3ra, CCA, color = "Island.Collected.From", shape = "Orientation") + ggtitle("CCA")  + scale_color_discrete(name = "Site")+theme_bw()+scale_color_manual(values = pal)
+p_RDA = plot_ordination(ps3ra, RDA, color = "Island.Collected.From", shape = "Orientation") + ggtitle("RDA")  + scale_color_discrete(name = "Site")+theme_bw()+scale_color_manual(values = pal)
 
 ggsave(p_NMDS, filename = "./Output/NMDS_w_corrected_names.png", dpi = 300)
 
@@ -194,7 +205,7 @@ otu = as.data.frame(otu_table(ps))
 meta = as.data.frame(sample_data(ps))
 df = data.frame(SampleID = meta$SampleID, Island = meta$Island.Collected.From, Species = meta$Species, Orientation = meta$Orientation)
 
-permanova = adonis(otu ~ Orientation, data = df)
+permanova = adonis(otu ~ Orientation * Island, data = df)
 
 
 sink("./Output/adonis_table.txt")
@@ -202,7 +213,12 @@ noquote(print("PermANOVA Table:"))
 permanova
 sink(NULL)
 
-
+source("pairwise_adonis.R")
+padonis = pairwise.adonis(otu,as.character(meta$Island.Collected))
+sink("./Output/adonis_table.txt",append = TRUE)
+noquote(print("Pairwise adonis between islands (Bonferroni corrected Pvalues:"))
+padonis
+sink(NULL)
 
 dd2 = readRDS(file = "./Output/clean_dada2_seqtable.RDS")
 
@@ -223,7 +239,7 @@ ggsave("./Output/NMDS_colored-by-Orientation.png", dpi = 300, height = 6, width 
 ggplot(mapping = aes(x=MDS1,y=MDS2,color=meta$Island, shape = meta$Orientation)) +
   geom_point() + theme_bw() +
   scale_color_discrete(name = "Site") +
-  scale_shape_discrete(name = "Orientation")
+  scale_shape_discrete(name = "Orientation") + scale_color_manual(values = pal)
 ggsave("./Output/NMDS_wo_Taxon-4_Site-and-Orientation.png", dpi = 300, height = 6, width = 6)
 
 
@@ -242,6 +258,57 @@ div %>% group_by(Site) %>%
 ggplot(div, aes(x=Site, y=Shannon, fill = Site)) +
   geom_boxplot() + theme_bw() +
   theme(axis.text.x = element_text(angle = 75, hjust = 1)) +
-  labs(y="Shannon Diversity")
-
+  labs(y="Shannon Diversity") + scale_color_manual(values = pal)
 ggsave(filename = "./Output/Shannon_Diversity.png", dpi = 300)  
+
+
+# Plot diversity bar charts ####
+bact_barplot = plot_bar2(ps3ra, fill = "Phylum") + 
+  geom_bar(aes(color=Phylum, fill=Phylum), stat = "identity") + labs(y="Relative Abundance",x = "Sample ID") + 
+  scale_fill_manual(values = pal) + scale_color_manual(values = pal) +
+  coord_flip()
+  ggsave(bact_barplot, filename = "../Output/RelAbund_Barplot_by_Sample.png", dpi = 300, height = 10, width = 8)  
+
+bact_barplot_order = plot_bar(ps3, fill = "Order") + 
+  geom_bar(aes(color=Order, fill=Order), stat = "identity") + labs(y="Relative Abundance",x = "Sample ID") + 
+  coord_flip()
+ggsave(bact_barplot_order, filename = "../Output/RelAbund_Barplot_Order_by_Sample.png", dpi = 300, height = 10, width = 20)  
+
+# Same, but mean for each island
+phylum_summary = summarize_taxa(ps3, Rank = "Phylum", GroupBy = "Island.Collected.From")
+ggplot(phylum_summary, aes(y=meanRA, x = Island.Collected.From, fill = Phylum)) +
+  geom_bar(stat="identity") + coord_flip() + theme_bw()
+
+
+
+for(island in levels(ps3@sam_data$Island.Collected.From)){
+  df = (summarize_taxa(subset_samples(ps3, Island.Collected.From == island), Rank = "Phylum"))
+  df$Island = island
+  df$RA = df$meanRA / sum(df$meanRA)
+  assign(island, df, envir = .GlobalEnv)   
+  print(island)
+}
+Sisters
+
+phylum_island = rbind(Hantu,Jong,Kusu,`Raffles Lighthouse`,Semakau,Sisters,`St John`,`Sultan Shoal`,TPT)
+
+for(island in levels(ps3@sam_data$Island.Collected.From)){
+  df = (summarize_taxa(subset_samples(ps3, Island.Collected.From == island), Rank = "Order"))
+  df$Island = island
+  df$RA = df$meanRA / sum(df$meanRA)
+  assign(island, df, envir = .GlobalEnv)   
+  print(island)
+}
+
+order_island = rbind(Hantu,Jong,Kusu,`Raffles Lighthouse`,Semakau,Sisters,`St John`,`Sultan Shoal`,TPT)
+
+ggplot(phylum_island, aes(y=((RA)), x = Island, fill = Phylum)) +
+  geom_bar(stat="identity") + coord_flip() + theme_bw() + labs(x= "Island", y = "Relative Abundance") +
+  scale_fill_manual(values = pal) 
+ggsave(filename = "../Output/Relabund_by_Island.png", dpi = 300, height = 6.07, width = 10)
+
+ggplot(order_island, aes(y=((RA)), x = Island, fill = Order)) +
+  geom_bar(stat="identity") + coord_flip() + theme_bw() + labs(x= "Island", y = "Relative Abundance") +
+ggsave(filename = "../Output/Relabund_order_by_Island.png", dpi = 300, height = 6.07, width = 16)
+
+
