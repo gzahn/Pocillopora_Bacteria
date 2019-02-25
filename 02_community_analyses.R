@@ -305,10 +305,10 @@ order_island = rbind(Hantu,Jong,Kusu,`Raffles Lighthouse`,Semakau,Sisters,`St Jo
 ggplot(phylum_island, aes(y=((RA)), x = Island, fill = Phylum)) +
   geom_bar(stat="identity") + coord_flip() + theme_bw() + labs(x= "Island", y = "Relative Abundance") +
   scale_fill_manual(values = pal) 
-ggsave(filename = "../Output/Relabund_by_Island.png", dpi = 300, height = 6.07, width = 10)
+ggsave(filename = "./Output/Relabund_by_Island.png", dpi = 300, height = 6.07, width = 10)
 
 ggplot(order_island, aes(y=((RA)), x = Island, fill = Order)) +
   geom_bar(stat="identity") + coord_flip() + theme_bw() + labs(x= "Island", y = "Relative Abundance") +
-ggsave(filename = "../Output/Relabund_order_by_Island.png", dpi = 300, height = 6.07, width = 16)
+ggsave(filename = "./Output/Relabund_order_by_Island.png", dpi = 300, height = 6.07, width = 16)
 
 
